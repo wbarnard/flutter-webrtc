@@ -130,6 +130,8 @@ class _RTCVideoViewState extends State<RTCVideoView> {
     _aspectRatio = _renderer.aspectRatio;
     _mirror = _renderer.mirror;
     _objectFit = _renderer.objectFit;
+
+    _updateContainerSize();
   }
 
   @override
@@ -167,6 +169,23 @@ class _RTCVideoViewState extends State<RTCVideoView> {
                         alignment: FractionalOffset.center,
                         child:
                             new Texture(textureId: _renderer._textureId))))));
+  }
+
+  void _updateContainerSize() {
+    double textureWidth = 0.0, textureHeight = 0.0;
+    if (_renderer.rotation == 90 || _renderer.rotation == 270) {
+      textureWidth = min(_renderer.width, _renderer.height);
+      textureHeight = max(_renderer.width, _renderer.height);
+      if (_renderer.height != 0.0) {
+        _aspectRatio = textureWidth / textureHeight;
+      }
+    } else {
+      textureWidth = max(_renderer.width, _renderer.height);
+      textureHeight = min(_renderer.width, _renderer.height);
+      if (_renderer.height != 0.0) {
+        _aspectRatio = textureWidth / textureHeight;
+      }
+    }
   }
 
   @override
